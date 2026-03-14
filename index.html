@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VALMO-X · Full System Concept</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0d1b2a;
+  --ink2:#1e3a5f;
+  --mid:#4a6580;
+  --light:#8fa8c0;
+  --pale:#c8d8e8;
+  --bg:#f4f7fb;
+  --white:#ffffff;
+  --accent:#0057b8;
+  --accent2:#1976d2;
+  --green:#1b7a3a;
+  --amber:#b85c00;
+  --red:#b71c1c;
+  --line:#dde8f2;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  line-height:1.7;
+}
+
+/* ── COVER PAGE ── */
+.cover{
+  min-height:100vh;
+  background:linear-gradient(160deg,#071628 0%,#0d2a52 45%,#0a1f3d 100%);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:60px 40px;
+  position:relative;
+  overflow:hidden;
+}
+.cover::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 20% 50%,rgba(0,100,220,0.12) 0%,transparent 50%),
+    radial-gradient(circle at 80% 20%,rgba(0,180,255,0.08) 0%,transparent 40%),
+    linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
+  background-size:auto,auto,50px 50px,50px 50px;
+  pointer-events:none;
+}
+.cover-badge{
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;
+  letter-spacing:4px;color:rgba(255,255,255,0.45);
+  text-transform:uppercase;margin-bottom:28px;
+  border:1px solid rgba(255,255,255,0.12);
+  padding:6px 18px;border-radius:2px;
+}
+.cover h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(52px,8vw,96px);
+  font-weight:900;
+  color:#ffffff;
+  letter-spacing:-2px;
+  line-height:0.95;
+  text-align:center;
+  margin-bottom:8px;
+}
+.cover h1 span{color:#4da6ff;}
+.cover-sub{
+  font-family:'DM Mono',monospace;font-size:12px;
+  letter-spacing:3px;color:rgba(255,255,255,0.4);
+  text-align:center;margin-top:16px;margin-bottom:48px;
+}
+.cover-desc{
+  max-width:580px;text-align:center;
+  font-size:16px;color:rgba(255,255,255,0.65);
+  line-height:1.8;margin-bottom:56px;
+}
+.cover-pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.pill{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.14);
+  padding:6px 16px;border-radius:2px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:2px;color:rgba(255,255,255,0.5);
+}
+.cover-scroll{
+  position:absolute;bottom:32px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:3px;color:rgba(255,255,255,0.25);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,0.2),transparent);}
+
+/* ── LAYOUT ── */
+.page{max-width:1100px;margin:0 auto;padding:80px 40px;}
+.section{margin-bottom:80px;}
+
+/* ── SECTION HEADERS ── */
+.sec-label{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  letter-spacing:4px;color:var(--accent);text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:12px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--line);}
+h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4vw,42px);
+  font-weight:700;color:var(--ink);
+  line-height:1.15;margin-bottom:24px;
+  letter-spacing:-0.5px;
+}
+h3{
+  font-family:'DM Sans',sans-serif;
+  font-size:18px;font-weight:600;
+  color:var(--ink2);margin-bottom:10px;
+}
+p{color:var(--mid);margin-bottom:14px;}
+strong{color:var(--ink);font-weight:600;}
+
+/* ── SENSOR CARDS ── */
+.sensor-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;margin-top:32px;
+}
+.sensor-card{
+  background:var(--white);
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  padding:28px 24px;
+  position:relative;
+  overflow:hidden;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.sensor-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,60,140,0.1);}
+.sensor-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+}
+.sc-pressure::before{background:linear-gradient(90deg,#0057b8,#1976d2);}
+.sc-temp::before{background:linear-gradient(90deg,#b85c00,#e65100);}
+.sc-vib::before{background:linear-gradient(90deg,#1b7a3a,#388e3c);}
+.sc-pos::before{background:linear-gradient(90deg,#0288d1,#039be5);}
+
+.sc-icon{
+  width:44px;height:44px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:16px;
+}
+.sc-pressure .sc-icon{background:#e3f0ff;}
+.sc-temp .sc-icon{background:#fff3e0;}
+.sc-vib .sc-icon{background:#e8f5e9;}
+.sc-pos .sc-icon{background:#e1f5fe;}
+
+.sc-name{
+  font-family:'DM Mono',monospace;font-size:10px;
+  font-weight:500;letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:6px;
+}
+.sc-pressure .sc-name{color:#0057b8;}
+.sc-temp .sc-name{color:#b85c00;}
+.sc-vib .sc-name{color:#1b7a3a;}
+.sc-pos .sc-name{color:#0288d1;}
+
+.sc-title{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+.sc-range{
+  font-family:'DM Mono',monospace;font-size:11px;
+  background:var(--bg);border:1px solid var(--line);
+  padding:8px 12px;border-radius:6px;margin-bottom:14px;
+}
+.sc-range-row{display:flex;justify-content:space-between;margin-bottom:3px;}
+.sc-range-row:last-child{margin-bottom:0;}
+.range-label{color:var(--light);font-size:10px;}
+.range-val{color:var(--ink2);font-weight:500;font-size:10px;}
+.range-warn{color:var(--amber);}
+.range-crit{color:var(--red);}
+
+.sc-type{
+  font-size:12px;color:var(--light);
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.sc-tag{
+  background:var(--bg);border:1px solid var(--pale);
+  padding:2px 8px;border-radius:3px;
+  font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);
+}
+
+/* ── SPEC TABLE ── */
+.spec-table{width:100%;border-collapse:collapse;margin-top:24px;font-size:14px;}
+.spec-table th{
+  text-align:left;padding:10px 16px;
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;
+  color:var(--accent);background:var(--bg);
+  border-bottom:2px solid var(--line);
+  font-weight:500;
+}
+.spec-table td{
+  padding:11px 16px;border-bottom:1px solid var(--line);
+  vertical-align:top;
+}
+.spec-table tr:last-child td{border-bottom:none;}
+.spec-table tr:hover td{background:#f8fafd;}
+.td-name{font-weight:600;color:var(--ink);font-size:13px;}
+.td-val{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink2);}
+.td-note{font-size:12px;color:var(--light);}
+
+/* ── PHYSICS COUPLING ── */
+.coupling-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;margin-top:24px;
+}
+.coupling-card{
+  background:var(--white);border:1.5px solid var(--line);
+  border-radius:8px;padding:16px 18px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.coupling-arrow{
+  font-family:'DM Mono',monospace;font-size:14px;
+  font-weight:500;color:var(--ink);
+  display:flex;align-items:center;gap:8px;
+}
+.ca-from{
+  padding:3px 8px;border-radius:3px;
+  font-size:12px;font-weight:600;
+}
+.ca-p{background:#e3f0ff;color:#0057b8;}
+.ca-t{background:#fff3e0;color:#b85c00;}
+.ca-v{background:#e8f5e9;color:#1b7a3a;}
+.ca-pos{background:#e1f5fe;color:#0288d1;}
+
+.ca-arrow{color:var(--pale);font-size:18px;}
+.coupling-formula{
+  font-family:'DM Mono',monospace;font-size:11px;
+  color:var(--mid);background:var(--bg);
+  padding:5px 8px;border-radius:4px;
+}
+.coupling-basis{font-size:11px;color:var(--light);}
+
+/* ── FAULT CARDS ── */
+.fault-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;margin-top:28px;
+}
+.fault-card{
+  background:var(--white);
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  padding:24px 22px;
+  position:relative;overflow:hidden;
+}
+.fault-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;}
+.fc-stiction::before{background:#0057b8;}
+.fc-leakage::before{background:#0288d1;}
+.fc-airleak::before{background:#1b7a3a;}
+.fc-mech::before{background:#b85c00;}
+
+.fault-num{
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:2px;color:var(--light);
+  margin-bottom:8px;
+}
+.fault-name{
+  font-size:16px;font-weight:700;color:var(--ink);
+  margin-bottom:10px;
+}
+.fault-sig{
+  font-size:13px;color:var(--mid);
+  margin-bottom:14px;line-height:1.6;
+}
+.fault-indicators{display:flex;flex-direction:column;gap:6px;}
+.fi{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:12px;color:var(--mid);
+}
+.fi-dot{
+  width:6px;height:6px;border-radius:50%;
+  flex-shrink:0;margin-top:5px;
+}
+.fc-stiction .fi-dot{background:#0057b8;}
+.fc-leakage .fi-dot{background:#0288d1;}
+.fc-airleak .fi-dot{background:#1b7a3a;}
+.fc-mech .fi-dot{background:#b85c00;}
+
+/* ── ARCHITECTURE FLOW ── */
+.arch-flow{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;margin-top:28px;
+}
+.arch-layer{
+  display:flex;align-items:stretch;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:16px;
+  background:var(--white);
+}
+.al-num{
+  width:52px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:13px;
+  font-weight:500;color:rgba(255,255,255,0.9);
+}
+.al-1 .al-num{background:#0057b8;}
+.al-2 .al-num{background:#0288d1;}
+.al-3 .al-num{background:#1b7a3a;}
+.al-4 .al-num{background:#b85c00;}
+
+.al-body{flex:1;padding:18px 22px;}
+.al-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.al-desc{font-size:13px;color:var(--mid);}
+.al-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.al-tag{
+  font-family:'DM Mono',monospace;font-size:10px;
+  padding:3px 8px;border-radius:3px;
+  background:var(--bg);border:1px solid var(--line);
+  color:var(--mid);
+}
+
+/* ── RUL SECTION ── */
+.rul-box{
+  background:var(--white);border:1.5px solid var(--line);
+  border-radius:10px;padding:32px 36px;
+  margin-top:24px;
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;
+}
+@media(max-width:640px){.rul-box{grid-template-columns:1fr;}}
+.rul-formula{
+  background:#071628;border-radius:8px;
+  padding:20px 24px;font-family:'DM Mono',monospace;
+  font-size:15px;color:#7ec8ff;letter-spacing:1px;
+  line-height:2;
+}
+.rul-formula .comment{color:#4a6a80;font-size:12px;}
+
+/* ── STANDARDS TABLE ── */
+.std-list{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
+.std-row{
+  display:flex;align-items:center;gap:16px;
+  background:var(--white);border:1.5px solid var(--line);
+  border-radius:8px;padding:14px 18px;
+}
+.std-code{
+  font-family:'DM Mono',monospace;font-size:12px;
+  font-weight:500;color:var(--accent);
+  min-width:130px;flex-shrink:0;
+}
+.std-desc{font-size:13px;color:var(--mid);}
+
+/* ── TECH STACK ── */
+.tech-cols{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;margin-top:24px;
+}
+.tech-col{
+  background:var(--white);border:1.5px solid var(--line);
+  border-radius:8px;padding:20px 18px;
+}
+.tech-col-title{
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px solid var(--line);
+}
+.tech-item{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;color:var(--mid);margin-bottom:7px;
+}
+.tech-item::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--pale);flex-shrink:0;
+}
+
+/* ── HIGHLIGHT BOX ── */
+.highlight{
+  background:linear-gradient(135deg,#eef4ff,#f4f8ff);
+  border:1.5px solid #c5d9f5;
+  border-radius:10px;padding:24px 28px;
+  margin:24px 0;
+}
+.highlight p{color:var(--ink2);margin-bottom:0;}
+
+/* ── CALLOUT ── */
+.callout{
+  display:flex;gap:16px;
+  background:var(--white);border:1.5px solid var(--line);
+  border-radius:8px;padding:18px 20px;margin-bottom:12px;
+}
+.callout-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.callout-body h4{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.callout-body p{font-size:13px;color:var(--mid);margin-bottom:0;}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--line);margin:60px 0;}
+
+/* ── FOOTER ── */
+.footer{
+  background:#071628;padding:40px;
+  text-align:center;
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:2px;color:rgba(255,255,255,0.25);
+}
+
+/* ── TOC ── */
+.toc{
+  background:var(--white);border:1.5px solid var(--line);
+  border-radius:10px;padding:28px 32px;
+  margin-bottom:60px;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;
+}
+@media(max-width:600px){.toc{grid-template-columns:1fr;}}
+.toc-item{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;color:var(--mid);
+  padding:6px 0;border-bottom:1px dashed var(--line);
+}
+.toc-num{
+  font-family:'DM Mono',monospace;font-size:11px;
+  color:var(--accent);min-width:24px;font-weight:500;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.cover h1,.cover-sub,.cover-desc,.cover-pills{animation:fadeUp 0.8s ease both;}
+.cover-sub{animation-delay:0.15s;}
+.cover-desc{animation-delay:0.25s;}
+.cover-pills{animation-delay:0.35s;}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ COVER ══════════════════════ -->
+<div class="cover">
+  <div class="cover-badge">Technical Concept Document · v8.0</div>
+  <h1>VALMO‑<span>X</span></h1>
+  <div class="cover-sub">Retrofit Smart Valve Condition Monitor · ANSI 150 RF</div>
+  <p class="cover-desc">
+    A complete IIoT predictive-maintenance system for pneumatic globe control valves.
+    Real-time sensor fusion, bi-directional physics coupling, automated fault classification,
+    and remaining useful life estimation — packaged as a single-file web dashboard.
+  </p>
+  <div class="cover-pills">
+    <span class="pill">4 SENSORS</span>
+    <span class="pill">10 PHYSICS COUPLINGS</span>
+    <span class="pill">4 FAULT MODES</span>
+    <span class="pill">RUL ESTIMATION</span>
+    <span class="pill">NODE-RED IIOT</span>
+    <span class="pill">ANSI 150 RF · WCB</span>
+  </div>
+  <div class="cover-scroll">
+    SCROLL
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
+<div class="page">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="sec-label">Contents</div>
+  <div class="toc">
+    <div class="toc-item"><span class="toc-num">01</span> What is VALMO-X?</div>
+    <div class="toc-item"><span class="toc-num">02</span> Target Hardware — GCV-10 Valve</div>
+    <div class="toc-item"><span class="toc-num">03</span> The 4 Sensors</div>
+    <div class="toc-item"><span class="toc-num">04</span> Sensor Thresholds (ANSI 150 RF)</div>
+    <div class="toc-item"><span class="toc-num">05</span> Physics Coupling Engine</div>
+    <div class="toc-item"><span class="toc-num">06</span> Fault Diagnosis — 4 Failure Modes</div>
+    <div class="toc-item"><span class="toc-num">07</span> Remaining Useful Life (RUL)</div>
+    <div class="toc-item"><span class="toc-num">08</span> System Architecture</div>
+    <div class="toc-item"><span class="toc-num">09</span> Dashboard Features</div>
+    <div class="toc-item"><span class="toc-num">10</span> Technology Stack</div>
+    <div class="toc-item"><span class="toc-num">11</span> Standards &amp; References</div>
+  </div>
+
+  <!-- ── 01 WHAT IS VALMO-X ── -->
+  <div class="section">
+    <div class="sec-label">01</div>
+    <h2>What is VALMO-X?</h2>
+    <p>
+      VALMO-X is a <strong>retrofit-compatible smart condition monitoring system</strong> for industrial
+      pneumatic globe control valves operating under ANSI 150 RF specifications.
+      The name stands for <strong>VALve MOnitoring eXtended</strong>.
+    </p>
+    <p>
+      The core problem it solves: traditional industrial valve maintenance is either
+      <em>purely reactive</em> (fix after failure) or <em>schedule-based</em> (replace on a calendar, regardless of actual wear).
+      Both approaches are expensive — reactive causes unplanned downtime, schedule-based wastes good components.
+    </p>
+    <div class="highlight">
+      <p>
+        <strong>VALMO-X enables predictive maintenance.</strong> By continuously monitoring pressure, temperature,
+        vibration and valve position, applying a physics-based coupling model, and running a real-time fault
+        classification engine, it detects degradation weeks or months before failure — and tells you exactly
+        how many hours of useful life remain.
+      </p>
+    </div>
+    <p>
+      The entire system runs as a <strong>single-file HTML dashboard</strong> — no server needed —
+      receiving live sensor data via Node-RED WebSocket from existing plant infrastructure.
+    </p>
+  </div>
+
+  <!-- ── 02 TARGET HARDWARE ── -->
+  <div class="section">
+    <div class="sec-label">02</div>
+    <h2>Target Hardware — GCV-10 Valve</h2>
+    <p>
+      The dashboard monitors a <strong>GCV-10 ANSI 150 RF Pneumatic Globe Control Valve</strong>
+      with a WCB (Cast Carbon Steel) body — the most common configuration in oil & gas,
+      petrochemical, and process industries worldwide.
+    </p>
+    <div class="callout">
+      <div class="callout-icon">⚙️</div>
+      <div class="callout-body">
+        <h4>ANSI 150 RF (Raised Face)</h4>
+        <p>ANSI/ASME B16.5 Class 150 pressure–temperature rating. Raised face flanges ensure a tight
+        metallic seal. WCB Carbon Steel rated to 285 psi at 100°F, pressure derated to 0 psi at 800°F.
+        Maximum working temperature for WCB body: 500°C (932°F).</p>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-icon">🔧</div>
+      <div class="callout-body">
+        <h4>Pneumatic Actuator (Spring-Return)</h4>
+        <p>Air-to-open or air-to-close spring-return diaphragm actuator. Supply pressure 20–100 psi air.
+        Positioner (electro-pneumatic) converts 4–20 mA control signal to air pressure for precise stem positioning.
+        Failure of the actuator or pneumatic supply causes position lag — a key fault signature monitored by VALMO-X.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-icon">🔩</div>
+      <div class="callout-body">
+        <h4>Globe Valve Trim</h4>
+        <p>Plug-and-seat trim design. Flow coefficient Cv scales with plug position according to
+        ISA-75.01 equal-percentage or linear characteristic. Trim wear leads directly to seat leakage —
+        the second fault mode monitored continuously by VALMO-X.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 03 THE 4 SENSORS ── -->
+  <div class="section">
+    <div class="sec-label">03</div>
+    <h2>The 4 Sensors</h2>
+    <p>
+      VALMO-X fuses data from exactly four sensor parameters. These were chosen because together
+      they span all physically observable fault signatures for this valve class, while remaining
+      practical and cost-effective for a retrofit installation.
+    </p>
+
+    <div class="sensor-grid">
+
+      <!-- PRESSURE -->
+      <div class="sensor-card sc-pressure">
+        <div class="sc-icon">⊙</div>
+        <div class="sc-name">Sensor 01</div>
+        <div class="sc-title">Process Pressure</div>
+        <p style="font-size:13px;margin-bottom:14px;">
+          Measures the upstream fluid pressure at the valve inlet. Directly indicates
+          system load and is the primary driver of the physics coupling cascade.
+          Detected via a pressure transmitter (typically 4–20 mA loop, HART protocol).
+        </p>
+        <div class="sc-range">
+          <div class="sc-range-row"><span class="range-label">Unit</span><span class="range-val">psi (gauge)</span></div>
+          <div class="sc-range-row"><span class="range-label">Operating Range</span><span class="range-val">0 – 300 psi</span></div>
+          <div class="sc-range-row"><span class="range-label">⚠ Warning</span><span class="range-val range-warn">≥ 145 psi</span></div>
+          <div class="sc-range-row"><span class="range-label">✖ Critical</span><span class="range-val range-crit">≥ 275 psi</span></div>
+        </div>
+        <div class="sc-type">
+          <span class="sc-tag">Pressure Transmitter</span>
+          <span class="sc-tag">4–20 mA / HART</span>
+          <span class="sc-tag">Piezoelectric</span>
+        </div>
+      </div>
+
+      <!-- TEMPERATURE -->
+      <div class="sensor-card sc-temp">
+        <div class="sc-icon">🌡</div>
+        <div class="sc-name">Sensor 02</div>
+        <div class="sc-title">Process Temperature</div>
+        <p style="font-size:13px;margin-bottom:14px;">
+          Measures fluid temperature at the valve body. Critical for detecting thermal
+          stress on WCB carbon steel. Also couples to stem elongation (position drift)
+          and contributes to mechanical degradation scoring.
+        </p>
+        <div class="sc-range">
+          <div class="sc-range-row"><span class="range-label">Unit</span><span class="range-val">°C (process)</span></div>
+          <div class="sc-range-row"><span class="range-label">Operating Range</span><span class="range-val">−29 – 500 °C</span></div>
+          <div class="sc-range-row"><span class="range-label">⚠ Warning</span><span class="range-val range-warn">≥ 380 °C</span></div>
+          <div class="sc-range-row"><span class="range-label">✖ Critical</span><span class="range-val range-crit">≥ 425 °C (WCB limit)</span></div>
+        </div>
+        <div class="sc-type">
+          <span class="sc-tag">Thermocouple / RTD</span>
+          <span class="sc-tag">Pt100 / Type K</span>
+          <span class="sc-tag">4–20 mA transmitter</span>
+        </div>
+      </div>
+
+      <!-- VIBRATION -->
+      <div class="sensor-card sc-vib">
+        <div class="sc-icon">〜</div>
+        <div class="sc-name">Sensor 03</div>
+        <div class="sc-title">Body Vibration</div>
+        <p style="font-size:13px;margin-bottom:14px;">
+          Measures vibration acceleration on the valve body. Captures flow-induced
+          turbulence, trim chatter (stiction), and mechanical looseness.
+          The most sensitive early-warning indicator — degradation shows here first.
+        </p>
+        <div class="sc-range">
+          <div class="sc-range-row"><span class="range-label">Unit</span><span class="range-val">g RMS</span></div>
+          <div class="sc-range-row"><span class="range-label">Operating Range</span><span class="range-val">0.0 – 5.0 g</span></div>
+          <div class="sc-range-row"><span class="range-label">⚠ Warning</span><span class="range-val range-warn">≥ 0.5 g</span></div>
+          <div class="sc-range-row"><span class="range-label">✖ Critical</span><span class="range-val range-crit">≥ 2.0 g</span></div>
+        </div>
+        <div class="sc-type">
+          <span class="sc-tag">MEMS Accelerometer</span>
+          <span class="sc-tag">Piezoelectric ICP</span>
+          <span class="sc-tag">Frequency 5–200 Hz</span>
+        </div>
+      </div>
+
+      <!-- POSITION -->
+      <div class="sensor-card sc-pos">
+        <div class="sc-icon">↕</div>
+        <div class="sc-name">Sensor 04</div>
+        <div class="sc-title">Stem Position (Deviation)</div>
+        <p style="font-size:13px;margin-bottom:14px;">
+          Measures deviation of the valve stem from its setpoint. Under normal
+          operation this should be near zero. Position hunting (oscillation)
+          is the primary stiction signature; lag indicates actuator faults.
+        </p>
+        <div class="sc-range">
+          <div class="sc-range-row"><span class="range-label">Unit</span><span class="range-val">% deviation</span></div>
+          <div class="sc-range-row"><span class="range-label">Operating Range</span><span class="range-val">0.0 – 10.0 %</span></div>
+          <div class="sc-range-row"><span class="range-label">⚠ Warning</span><span class="range-val range-warn">≥ 3 %</span></div>
+          <div class="sc-range-row"><span class="range-label">✖ Critical</span><span class="range-val range-crit">≥ 5 %</span></div>
+        </div>
+        <div class="sc-type">
+          <span class="sc-tag">LVDT Position Sensor</span>
+          <span class="sc-tag">Smart Positioner</span>
+          <span class="sc-tag">4–20 mA feedback</span></div>
+      </div>
+
+    </div><!-- end sensor-grid -->
+  </div>
+
+  <!-- ── 04 THRESHOLDS ── -->
+  <div class="section">
+    <div class="sec-label">04</div>
+    <h2>Sensor Thresholds — ANSI 150 RF / WCB Carbon Steel</h2>
+    <p>
+      All thresholds are derived from ANSI/ASME B16.5, ISA-75 and manufacturer specifications
+      for WCB Carbon Steel ANSI 150 RF flanged globe valves. The three-tier system
+      (Normal / Warning / Critical) drives badge colours, card borders, and alert banners in the dashboard.
+    </p>
+
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Unit</th>
+          <th>Normal Range</th>
+          <th>⚠ Warning</th>
+          <th>✖ Critical</th>
+          <th>Max / Safe Limit</th>
+          <th>Basis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-name">Process Pressure</td>
+          <td class="td-val">psi</td>
+          <td class="td-val">0 – 144</td>
+          <td class="td-val" style="color:var(--amber);">145</td>
+          <td class="td-val" style="color:var(--red);">275</td>
+          <td class="td-val">300 psi</td>
+          <td class="td-note">ANSI B16.5 Class 150 · 285 psi @ 100°F</td>
+        </tr>
+        <tr>
+          <td class="td-name">Process Temperature</td>
+          <td class="td-val">°C</td>
+          <td class="td-val">−29 – 379</td>
+          <td class="td-val" style="color:var(--amber);">380</td>
+          <td class="td-val" style="color:var(--red);">425</td>
+          <td class="td-val">500 °C</td>
+          <td class="td-note">WCB Carbon Steel rated −29 to +538°C</td>
+        </tr>
+        <tr>
+          <td class="td-name">Body Vibration</td>
+          <td class="td-val">g RMS</td>
+          <td class="td-val">0.0 – 0.49</td>
+          <td class="td-val" style="color:var(--amber);">0.5</td>
+          <td class="td-val" style="color:var(--red);">2.0</td>
+          <td class="td-val">5.0 g</td>
+          <td class="td-note">Emerson Research · ISO 10816 guideline</td>
+        </tr>
+        <tr>
+          <td class="td-name">Stem Position Deviation</td>
+          <td class="td-val">%</td>
+          <td class="td-val">0.0 – 2.9</td>
+          <td class="td-val" style="color:var(--amber);">3</td>
+          <td class="td-val" style="color:var(--red);">5</td>
+          <td class="td-val">10 %</td>
+          <td class="td-note">ISA-75 Positioner spec · IEC 60534-2-1</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:16px;">
+      <strong>Derived values</strong> computed from sensor readings include:
+      pressure in bar and Pascal, temperature in Kelvin with thermal stress classification
+      (LOW / MODERATE / HIGH / CRITICAL), vibration frequency (~5 Hz nominal),
+      stem deviation in mm, and flow coefficient Cv calculated from position and pressure.
+    </p>
+  </div>
+
+  <!-- ── 05 PHYSICS COUPLING ── -->
+  <div class="section">
+    <div class="sec-label">05</div>
+    <h2>Bi-Directional Physics Coupling Engine</h2>
+    <p>
+      In a real valve installation, no sensor operates in isolation. A pressure spike changes the temperature;
+      temperature raises pressure; vibration from turbulence shifts the plug position.
+      VALMO-X models <strong>10 physical cross-couplings</strong> between all 4 sensor parameters,
+      applied in sequence on every data cycle. This eliminates false alarms from coupled effects
+      and provides early composite warnings that no single sensor would detect alone.
+    </p>
+    <div class="highlight">
+      <p>
+        <strong>Example cascade:</strong> Pressure rises to 200 psi → compression heating adds +21.6°C to temperature →
+        elevated temperature raises pressure by +0.8 psi → high pressure drives turbulence, adding +0.21g vibration →
+        vibration chatter drifts position by +0.35% → position throttling adds +1.2°C friction heat.
+        All five events are logged individually with their coupling formula in the Event Log.
+      </p>
+    </div>
+
+    <div class="coupling-grid">
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-p">P</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-t">T</span>
+        </div>
+        <div class="coupling-formula">+0.18°C per psi above 80</div>
+        <div class="coupling-basis">Joule-Thomson throttling · Gay-Lussac compression heating</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-t">T</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-p">P</span>
+        </div>
+        <div class="coupling-formula">+0.004 psi/°C above 200°C</div>
+        <div class="coupling-basis">Thermal fluid volumetric expansion raises system pressure</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-p">P</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-v">Vib</span>
+        </div>
+        <div class="coupling-formula">+0.0015g per psi above 60</div>
+        <div class="coupling-basis">High ΔP drives flow-induced turbulence · Emerson research</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-v">Vib</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-p">P</span>
+        </div>
+        <div class="coupling-formula">+2.5 psi per g above 0.5g</div>
+        <div class="coupling-basis">Acoustic pulsation · FSI (Fluid-Structure Interaction) 2022</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-t">T</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-pos">Pos</span>
+        </div>
+        <div class="coupling-formula">+0.008% per °C above 250°C</div>
+        <div class="coupling-basis">WCB stem thermal elongation · CTE = 12 µm/m·°C</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-pos">Pos</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-t">T</span>
+        </div>
+        <div class="coupling-formula">+1.2°C per % above 2%</div>
+        <div class="coupling-basis">Throttle friction heating at partial valve closure</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-p">P</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-pos">Pos</span>
+        </div>
+        <div class="coupling-formula">+0.008% per psi above 120</div>
+        <div class="coupling-basis">Plug unbalanced force breaks positioner stiction · ISA-75</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-pos">Pos</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-v">Vib</span>
+        </div>
+        <div class="coupling-formula">+0.08g per % above 1.5%</div>
+        <div class="coupling-basis">Partial closure trim turbulence · throttling excitation</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-v">Vib</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-pos">Pos</span>
+        </div>
+        <div class="coupling-formula">+0.35% per g above 1.0g</div>
+        <div class="coupling-basis">Valve chatter causes positioner stem drift · stiction break</div>
+      </div>
+
+      <div class="coupling-card">
+        <div class="coupling-arrow">
+          <span class="ca-from ca-t">T</span>
+          <span class="ca-arrow">→</span>
+          <span class="ca-from ca-v">Vib</span>
+        </div>
+        <div class="coupling-formula">+0.0018g per °C above 300°C</div>
+        <div class="coupling-basis">Stem thermal expansion intermittent seat contact · chatter</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 06 FAULT MODES ── -->
+  <div class="section">
+    <div class="sec-label">06</div>
+    <h2>Fault Diagnosis — 4 Failure Modes</h2>
+    <p>
+      The Fault Diagnosis Engine runs on every physics update cycle and scores each of the
+      four documented failure modes. Scores range 0–100; thresholds at 30 (early warning)
+      and 60 (confirmed fault) trigger log events and badge colour changes.
+    </p>
+
+    <div class="fault-grid">
+
+      <div class="fault-card fc-stiction">
+        <div class="fault-num">FAULT MODE 01</div>
+        <div class="fault-name">⚙ Stiction Detection</div>
+        <div class="fault-sig">
+          Stick-slip friction in the valve stem packing or positioner causes
+          the plug to stick, then jump erratically when force builds enough to overcome friction.
+          Invisible on a single snapshot — only detectable through position oscillation patterns over time.
+        </div>
+        <div class="fault-indicators">
+          <div class="fi"><div class="fi-dot"></div><span><strong>Primary signature:</strong> Position hunting — repeated direction reversals without setpoint change. Scored by counting direction-change cycles.</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Secondary signature:</strong> Erratic vibration spikes (Vib &gt; 0.8g) coinciding with position jumps — mechanical energy release from stick-to-slip transition.</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Score formula:</strong> (hunting cycles × 8) + vibration penalty + position deviation penalty. Max 100.</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Action threshold:</strong> Score &gt; 60 → schedule positioner repacking or trim cleaning.</span></div>
+        </div>
+      </div>
+
+      <div class="fault-card fc-leakage">
+        <div class="fault-num">FAULT MODE 02</div>
+        <div class="fault-name">💧 Seat Leakage</div>
+        <div class="fault-sig">
+          Wear or erosion of the valve seat and plug trim allows fluid to flow
+          even when the valve is commanded fully closed. Classified by ANSI/FCI 70-2
+          leakage classes I through VI. VALMO-X detects and classifies this in real time.
+        </div>
+        <div class="fault-indicators">
+          <div class="fi"><div class="fi-dot"></div><span><strong>Primary signature:</strong> Non-zero flow Cv (residual flow coefficient) when position deviation is &lt; 2% (near-shutoff condition).</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Leakage classes:</strong> SEALED (score &lt;20), CLASS III (20–50), CLASS II (50–75), CLASS I LEAK (≥75).</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Shutoff integrity:</strong> Calculated from residual Cv and upstream pressure. Decreases as leakage worsens.</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Hazard:</strong> Undetected seat leakage causes production loss, cross-contamination, or safety-critical fluid escape.</span></div>
+        </div>
+      </div>
+
+      <div class="fault-card fc-airleak">
+        <div class="fault-num">FAULT MODE 03</div>
+        <div class="fault-name">🌬 Actuator Air Leak</div>
+        <div class="fault-sig">
+          Diaphragm rupture, tubing fitting failure, or positioner seal wear causes
+          pneumatic supply pressure to decay. The actuator becomes sluggish, unable
+          to move the stem at normal speed — increasing risk of uncontrolled shutdown.
+        </div>
+        <div class="fault-indicators">
+          <div class="fi"><div class="fi-dot"></div><span><strong>Primary signature:</strong> Position lag — the stem position deviates from setpoint and responds slowly, especially during rapid setpoint changes.</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Pressure decay metric:</strong> Supply pressure drop rate (psi/min) computed from score. Normal: &lt;1.5 psi/min; Fault: &gt;4.8 psi/min.</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Stroke response states:</strong> NORMAL → SLUGGISH (score 30–60) → LAGGING (score &gt;60).</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Compounding condition:</strong> High vibration with near-zero position movement = stiff/locked actuator, highest risk state.</span></div>
+        </div>
+      </div>
+
+      <div class="fault-card fc-mech">
+        <div class="fault-num">FAULT MODE 04</div>
+        <div class="fault-name">⚠ Mechanical Degradation</div>
+        <div class="fault-sig">
+          Cumulative damage from thermal cycling, pressure pulsation, and vibration
+          causes invisible wear accumulation in packing, trim, bearings, and body.
+          This is the basis for Remaining Useful Life estimation — the most
+          industrially valuable output of VALMO-X.
+        </div>
+        <div class="fault-indicators">
+          <div class="fi"><div class="fi-dot"></div><span><strong>Wear scoring:</strong> Incremental score accumulates every cycle based on operating conditions above warning thresholds: Vib (+0.06/cycle), T (+0.08/cycle), P (+0.04/cycle), Pos (+0.05/cycle).</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Severity levels:</strong> HEALTHY (0–25%), WEAR ONSET (25–50%), DEGRADED (50–75%), CRITICAL WEAR (75–100%).</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>RUL output:</strong> Exponential degradation model feeds directly into Remaining Useful Life estimate (see Section 07).</span></div>
+          <div class="fi"><div class="fi-dot"></div><span><strong>Early action window:</strong> Alert triggers at score &gt; 50% — provides 25–50% remaining life for planned shutdown scheduling.</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 07 RUL ── -->
+  <div class="section">
+    <div class="sec-label">07</div>
+    <h2>Remaining Useful Life (RUL) Estimation</h2>
+    <p>
+      VALMO-X estimates RUL using an exponential degradation model — the industry-standard
+      approach for mechanical wear processes where failure rate increases with accumulated damage.
+      The model assumes a maximum design life of <strong>8,760 hours (1 year)</strong> for continuous
+      service, consistent with typical industrial valve inspection intervals.
+    </p>
+
+    <div class="rul-box">
+      <div>
+        <h3>The Formula</h3>
+        <div class="rul-formula">
+          RUL = MaxLife × e<sup style="font-size:10px">−k × D</sup>
+          <br><br>
+          <span class="comment">Where:</span><br>
+          MaxLife = 8760 h (1 year)<br>
+          k = 0.046 (decay constant)<br>
+          D = degradScore (0 – 100)
+        </div>
+      </div>
+      <div>
+        <h3>Worked Examples</h3>
+        <table class="spec-table" style="margin-top:0;">
+          <thead>
+            <tr>
+              <th>Degrad Score</th>
+              <th>Severity</th>
+              <th>RUL Output</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-val">5%</td>
+              <td class="td-note">Healthy</td>
+              <td class="td-val" style="color:var(--green);">6,923 h ≈ 9.6 mo</td>
+            </tr>
+            <tr>
+              <td class="td-val">25%</td>
+              <td class="td-note">Wear Onset</td>
+              <td class="td-val" style="color:var(--green);">2,866 h ≈ 4.0 mo</td>
+            </tr>
+            <tr>
+              <td class="td-val">50%</td>
+              <td class="td-note">Degraded</td>
+              <td class="td-val" style="color:var(--amber);">939 h ≈ 39 d</td>
+            </tr>
+            <tr>
+              <td class="td-val">75%</td>
+              <td class="td-note">Critical Wear</td>
+              <td class="td-val" style="color:var(--red);">308 h ≈ 13 d</td>
+            </tr>
+            <tr>
+              <td class="td-val">100%</td>
+              <td class="td-note">End of Life</td>
+              <td class="td-val" style="color:var(--red);">101 h ≈ 4 d</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p style="margin-top:20px;">
+      The RUL is displayed in three locations on the dashboard: the header stat bar,
+      the system health panel (centre column), and the Mechanical Degradation fault card.
+      The display format automatically scales: months (mo) when &gt; 720h, days (d) when &gt; 24h,
+      and hours (h) for urgent end-of-life conditions.
+    </p>
+  </div>
+
+  <!-- ── 08 ARCHITECTURE ── -->
+  <div class="section">
+    <div class="sec-label">08</div>
+    <h2>System Architecture — 4 Layers</h2>
+    <p>
+      VALMO-X follows a four-layer IIoT architecture, from physical sensors through
+      edge processing to the analytics engine and final visualisation. The design
+      is retrofit-first: it plugs into existing plant infrastructure without replacing
+      any installed hardware.
+    </p>
+
+    <div class="arch-flow">
+
+      <div class="arch-layer al-1">
+        <div class="al-num">L1</div>
+        <div class="al-body">
+          <div class="al-title">Sensor Field Layer — Physical Measurements</div>
+          <div class="al-desc">Pressure transmitter, temperature transmitter (RTD/TC), MEMS accelerometer on valve body, and smart positioner feedback. All wired to field junction box. Signals are 4–20 mA loops with optional HART digital overlay for diagnostic data.</div>
+          <div class="al-tags">
+            <span class="al-tag">4–20 mA / HART</span>
+            <span class="al-tag">Pt100 RTD</span>
+            <span class="al-tag">Type K Thermocouple</span>
+            <span class="al-tag">MEMS Accelerometer</span>
+            <span class="al-tag">LVDT Position</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-layer al-2">
+        <div class="al-num">L2</div>
+        <div class="al-body">
+          <div class="al-title">Edge / Gateway Layer — Node-RED</div>
+          <div class="al-desc">Node-RED flow running on a Raspberry Pi or industrial gateway (Siemens IOT2040, etc.) reads the 4–20 mA signals via I/O modules, applies engineering unit scaling, runs threshold checks, and publishes JSON payloads over WebSocket on port 1880. Four sensor flows plus four fault simulation flows for testing.</div>
+          <div class="al-tags">
+            <span class="al-tag">Node-RED 3.x</span>
+            <span class="al-tag">WebSocket /ws/valve</span>
+            <span class="al-tag">JSON payload</span>
+            <span class="al-tag">Raspberry Pi 4</span>
+            <span class="al-tag">Siemens IOT2040</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-layer al-3">
+        <div class="al-num">L3</div>
+        <div class="al-body">
+          <div class="al-title">Analytics Layer — Physics + Fault Engine (Browser)</div>
+          <div class="al-desc">The VALMO-X dashboard JavaScript receives WebSocket frames and runs: (1) 10-coupling bi-directional physics engine, (2) four fault diagnosis algorithms with real-time scoring, (3) exponential RUL estimator, (4) health index calculation, (5) sparkline history buffers, (6) CSV export logger. All computation runs client-side — no cloud dependency.</div>
+          <div class="al-tags">
+            <span class="al-tag">Physics Coupling Engine</span>
+            <span class="al-tag">Fault Scoring</span>
+            <span class="al-tag">RUL Model</span>
+            <span class="al-tag">Vanilla JavaScript</span>
+            <span class="al-tag">Zero backend</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-layer al-4">
+        <div class="al-num">L4</div>
+        <div class="al-body">
+          <div class="al-title">Visualisation Layer — VALMO-X Dashboard</div>
+          <div class="al-desc">Single-file HTML dashboard rendering: 4 sensor cards with sparkline charts, live 3D Three.js valve model with water flow animation, system health arc gauge, 4 fault diagnosis cards with progress bars, RUL widget, event log, maintenance mode overlay, and CSV export. Responsive, no framework, no build step.</div>
+          <div class="al-tags">
+            <span class="al-tag">Three.js r128 3D Model</span>
+            <span class="al-tag">HTML5 Canvas Charts</span>
+            <span class="al-tag">4 Sensor Cards</span>
+            <span class="al-tag">4 Fault Cards</span>
+            <span class="al-tag">CSV Export</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p style="margin-top:20px;">
+      <strong>Node-RED JSON payload format:</strong>
+      <code style="background:var(--white);border:1px solid var(--line);padding:2px 8px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;">
+        {"pressure":120, "temperature":80, "vibration":0.1, "position":1}
+      </code>
+    </p>
+  </div>
+
+  <!-- ── 09 DASHBOARD FEATURES ── -->
+  <div class="section">
+    <div class="sec-label">09</div>
+    <h2>Dashboard Features</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:24px;">
+
+      <div class="callout">
+        <div class="callout-icon">📊</div>
+        <div class="callout-body">
+          <h4>4 Sensor Cards</h4>
+          <p>Each card shows: live big-number value, unit with sub-type, derived SI conversions, colour-coded progress bar, warn/crit threshold tags, 30-point sparkline history, fault coupling note. Cards flash red with animation on CRITICAL.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">🎮</div>
+        <div class="callout-body">
+          <h4>Live 3D Valve Model</h4>
+          <p>Three.js 3D globe valve with animated water flow particles, stem movement based on position reading, LED status indicator, overlay tags for all 4 sensor live values, and burst/fault animation on critical events.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">💚</div>
+        <div class="callout-body">
+          <h4>System Health Index</h4>
+          <p>SVG arc gauge 0–100%. Calculated as the average of all four sensor status scores (100 = normal, 60 = warning, 10 = critical). Turns amber at &lt;70%, red at &lt;40%. Also shown as large numeric + state label.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">⏳</div>
+        <div class="callout-body">
+          <h4>RUL Widget</h4>
+          <p>Remaining Useful Life display with hours/days/months formatting, colour-coded progress bar, and degradation rate label. Appears in both the health row and the header stat bar for at-a-glance visibility.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">🔍</div>
+        <div class="callout-body">
+          <h4>Fault Diagnosis Panel</h4>
+          <p>Four fault cards (Stiction, Seat Leakage, Air Leak, Mech Degradation) each showing: status badge, two metric rows, RUL progress bar, and coupling note. Cards border-highlight by severity with pulsing animation on confirmed fault.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">📋</div>
+        <div class="callout-body">
+          <h4>Event Log</h4>
+          <p>Timestamped scrollable log with colour-coded entries: INFO (blue), WARNING (amber), CRITICAL (red), OK (green), DERIVED (grey for physics coupling events). Every coupling, fault detection, and threshold breach is logged automatically.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">🔌</div>
+        <div class="callout-body">
+          <h4>WebSocket Live Connection</h4>
+          <p>Connect to any Node-RED WebSocket endpoint. Dot indicator shows CONNECTED (green, blinking) / DISCONNECTED (red) / CONNECTING (amber). URL editable in dashboard. Auto-reconnect on disconnect.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">🔧</div>
+        <div class="callout-body">
+          <h4>Maintenance Mode</h4>
+          <p>Toggle button pauses monitoring and shows a high-visibility striped banner. Logs maintenance start/end. All sensor updates continue recording but alerts are suppressed during scheduled maintenance windows.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">💾</div>
+        <div class="callout-body">
+          <h4>CSV Export</h4>
+          <p>One-click export of all recorded sensor data with timestamps, raw values, physics-corrected values, fault scores, and RUL estimates. Accumulates up to 10,000+ rows during a monitoring session.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 10 TECH STACK ── -->
+  <div class="section">
+    <div class="sec-label">10</div>
+    <h2>Technology Stack</h2>
+    <div class="tech-cols">
+
+      <div class="tech-col">
+        <div class="tech-col-title">Frontend</div>
+        <div class="tech-item">HTML5 — single file, no build</div>
+        <div class="tech-item">Vanilla JavaScript ES6+</div>
+        <div class="tech-item">CSS3 custom properties</div>
+        <div class="tech-item">HTML5 Canvas API (charts)</div>
+        <div class="tech-item">WebSocket API (live data)</div>
+        <div class="tech-item">Blob API (CSV export)</div>
+      </div>
+
+      <div class="tech-col">
+        <div class="tech-col-title">3D Rendering</div>
+        <div class="tech-item">Three.js r128</div>
+        <div class="tech-item">WebGL renderer</div>
+        <div class="tech-item">PerspectiveCamera + OrbitControls</div>
+        <div class="tech-item">MeshStandardMaterial (PBR)</div>
+        <div class="tech-item">PointLight / AmbientLight</div>
+        <div class="tech-item">Water particle animation</div>
+      </div>
+
+      <div class="tech-col">
+        <div class="tech-col-title">Typography</div>
+        <div class="tech-item">Orbitron — headings, values</div>
+        <div class="tech-item">Share Tech Mono — labels, log</div>
+        <div class="tech-item">Exo 2 — body text</div>
+        <div class="tech-item">Google Fonts CDN</div>
+      </div>
+
+      <div class="tech-col">
+        <div class="tech-col-title">IIoT Integration</div>
+        <div class="tech-item">Node-RED 3.x flow platform</div>
+        <div class="tech-item">WebSocket server node</div>
+        <div class="tech-item">JSON message format</div>
+        <div class="tech-item">4 sensor simulation flows</div>
+        <div class="tech-item">4 fault injection flows</div>
+        <div class="tech-item">Utility: inject / debug nodes</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 11 STANDARDS ── -->
+  <div class="section">
+    <div class="sec-label">11</div>
+    <h2>Standards &amp; References</h2>
+    <div class="std-list">
+      <div class="std-row">
+        <div class="std-code">ANSI / ASME B16.5</div>
+        <div class="std-desc">Pipe Flanges and Flanged Fittings — defines Class 150 RF pressure–temperature ratings used for all pressure thresholds</div>
+      </div>
+      <div class="std-row">
+        <div class="std-code">ISA-75.01.01</div>
+        <div class="std-desc">Flow Equations for Sizing Control Valves — Cv calculation formula and trim characteristic definitions</div>
+      </div>
+      <div class="std-row">
+        <div class="std-code">IEC 60534-2-1</div>
+        <div class="std-desc">Industrial Process Control Valves — sizing equations, positioner accuracy specs, position deviation limits</div>
+      </div>
+      <div class="std-row">
+        <div class="std-code">ANSI / FCI 70-2</div>
+        <div class="std-desc">Control Valve Seat Leakage — defines leakage classes I through VI used in the seat leakage fault detector</div>
+      </div>
+      <div class="std-row">
+        <div class="std-code">ASTM A216 WCB</div>
+        <div class="std-desc">Standard Specification for Steel Castings — defines WCB Carbon Steel temperature range (−29°C to +538°C) and material properties</div>
+      </div>
+      <div class="std-row">
+        <div class="std-code">ISO 10816-3</div>
+        <div class="std-desc">Mechanical vibration — Evaluation of machine vibration — vibration threshold basis for 0.5g warning and 2.0g critical limits</div>
+      </div>
+      <div class="std-row">
+        <div class="std-code">Emerson / Fisher</div>
+        <div class="std-desc">Control Valve Handbook — P→Vib turbulence coefficient, acoustic pulsation models, actuator sizing guidelines</div>
+      </div>
+      <div class="std-row">
+        <div class="std-code">FSI Research 2022</div>
+        <div class="std-desc">Fluid-Structure Interaction studies — Vib→P acoustic pulsation feedback coefficient (2.5 psi/g above 0.5g)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SUMMARY -->
+  <div class="section" style="margin-bottom:40px;">
+    <div class="sec-label">Summary</div>
+    <h2>What VALMO-X Delivers</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:20px;">
+
+      <div style="background:var(--white);border:1.5px solid var(--line);border-radius:10px;padding:24px 20px;text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--accent);margin-bottom:6px;">4</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--light);">SENSORS FUSED</div>
+      </div>
+      <div style="background:var(--white);border:1.5px solid var(--line);border-radius:10px;padding:24px 20px;text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--accent);margin-bottom:6px;">10</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--light);">PHYSICS COUPLINGS</div>
+      </div>
+      <div style="background:var(--white);border:1.5px solid var(--line);border-radius:10px;padding:24px 20px;text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--accent);margin-bottom:6px;">4</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--light);">FAULT MODES CLASSIFIED</div>
+      </div>
+      <div style="background:var(--white);border:1.5px solid var(--line);border-radius:10px;padding:24px 20px;text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--accent);margin-bottom:6px;">1</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--light);">FILE · NO SERVER NEEDED</div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end page -->
+
+<div class="footer">
+  VALMO-X · Retrofit Smart Valve Condition Monitor · ANSI 150 RF · GCV-10 ·
+  EdgeX Industrial · Technical Concept Document v8.0
+</div>
+
+</body>
+</html>
